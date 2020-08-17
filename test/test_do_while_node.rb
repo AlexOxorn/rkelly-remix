@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + "/helper"
+require File.dirname(__FILE__) + '/helper'
 
 class DoWhileNodeTest < NodeTestCase
   def test_to_sepx
@@ -8,6 +8,6 @@ class DoWhileNodeTest < NodeTestCase
     node = DoWhileNode.new(stmt, TrueNode.new('true'))
 
     assert_sexp([:do_while, [:var, [[:var_decl, :foo, [:assign, [:lit, 10]]]]],
-                [:true]], node)
+                 [:true]], node)
   end
 end

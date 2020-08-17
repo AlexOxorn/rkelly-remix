@@ -1,9 +1,9 @@
-require File.dirname(__FILE__) + "/helper"
+require File.dirname(__FILE__) + '/helper'
 
 class CharRangeTest < NodeTestCase
   def test_advancing_empty_range
     a = RECMA::CharRange::EMPTY
-    b = a.next("foo")
+    b = a.next('foo')
 
     assert_equal(1, b.from.line)
     assert_equal(1, b.from.char)
@@ -15,7 +15,7 @@ class CharRangeTest < NodeTestCase
   end
 
   def test_advancing_with_multiline_string
-    a = RECMA::CharRange.new(RECMA::CharPos.new(1,1,0), RECMA::CharPos.new(1,1,0))
+    a = RECMA::CharRange.new(RECMA::CharPos.new(1, 1, 0), RECMA::CharPos.new(1, 1, 0))
     b = a.next("foo\nblah")
 
     assert_equal(1, b.from.line)

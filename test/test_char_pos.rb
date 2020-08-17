@@ -1,9 +1,9 @@
-require File.dirname(__FILE__) + "/helper"
+require File.dirname(__FILE__) + '/helper'
 
 class CharPosTest < NodeTestCase
   def test_advancing_empty_position
     a = RECMA::CharPos::EMPTY
-    b = a.next("foo")
+    b = a.next('foo')
 
     assert_equal(1, b.line)
     assert_equal(3, b.char)
@@ -11,8 +11,8 @@ class CharPosTest < NodeTestCase
   end
 
   def test_advancing_with_single_line_string
-    a = RECMA::CharPos.new(3,5,22)
-    b = a.next("foo bar")
+    a = RECMA::CharPos.new(3, 5, 22)
+    b = a.next('foo bar')
 
     assert_equal(3, b.line)
     assert_equal(12, b.char)
@@ -20,7 +20,7 @@ class CharPosTest < NodeTestCase
   end
 
   def test_advancing_with_multi_line_string
-    a = RECMA::CharPos.new(3,5,22)
+    a = RECMA::CharPos.new(3, 5, 22)
     b = a.next("\nfoo\nbar\nbaz")
 
     assert_equal(6, b.line)
@@ -29,7 +29,7 @@ class CharPosTest < NodeTestCase
   end
 
   def test_advancing_with_multi_line_string_ending_with_newline
-    a = RECMA::CharPos.new(3,5,22)
+    a = RECMA::CharPos.new(3, 5, 22)
     b = a.next("\nfoo\nbar\n")
 
     assert_equal(6, b.line)

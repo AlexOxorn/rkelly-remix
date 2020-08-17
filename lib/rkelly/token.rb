@@ -14,11 +14,12 @@ module RECMA
 
     def to_racc_token
       return transformer.call(name, value) if transformer
+
       [name, value]
     end
 
     def to_s
-      return "#{self.name}: #{self.value}"
+      "#{name}: #{value}"
     end
   end
 end

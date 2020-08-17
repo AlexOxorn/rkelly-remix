@@ -9,14 +9,14 @@ module RECMA
       end
 
       def visit_SourceElementsNode(o)
-        o.value.each { |x|
+        o.value.each do |x|
           next if scope_chain.returned?
+
           x.accept(self)
-        }
+        end
       end
 
-      def visit_FunctionDeclNode(o)
-      end
+      def visit_FunctionDeclNode(o); end
 
       def visit_VarStatementNode(o)
         o.value.each { |x| x.accept(self) }
@@ -24,7 +24,7 @@ module RECMA
 
       def visit_VarDeclNode(o)
         @operand << o.name
-        o.value.accept(self) if o.value
+        o.value&.accept(self)
         @operand.pop
       end
 
@@ -33,7 +33,7 @@ module RECMA
         if truthiness.value && truthiness.value != 0
           o.value.accept(self)
         else
-          o.else && o.else.accept(self)
+          o.else&.accept(self)
         end
       end
 
@@ -41,7 +41,7 @@ module RECMA
         scope_chain[o.value]
       end
 
-      def visit_ThisNode(o)
+      def visit_ThisNode(_o)
         scope_chain.this
       end
 
@@ -55,8 +55,7 @@ module RECMA
 
         if left.value.is_a?(::String) || right.value.is_a?(::String)
           RECMA::JS::Property.new(:add,
-            "#{left.value}#{right.value}"
-          )
+                                  "#{left.value}#{right.value}")
         else
           additive_operator(:+, left, right)
         end
@@ -64,21 +63,25 @@ module RECMA
 
       def visit_SubtractNode(o)
         RECMA::JS::Property.new(:subtract,
-          o.left.accept(self).value - o.value.accept(self).value
-        )
+                                o.left.accept(self).value - o.value.accept(self).value)
       end
 
       def visit_MultiplyNode(o)
         left = to_number(o.left.accept(self)).value
         right = to_number(o.value.accept(self)).value
-        return_val = 
+        return_val =
           if [left, right].any? { |x| x.respond_to?(:nan?) && x.nan? }
             RECMA::JS::NaN.new
           else
-            [left, right].any? { |x|
+            if [left, right].any? do |x|
               x.respond_to?(:intinite?) && x.infinite?
-            } && [left, right].any? { |x| x == 0
-            } ? RECMA::JS::NaN.new : left * right
+            end && [left, right].any? do |x|
+              x == 0
+            end
+              RECMA::JS::NaN.new
+            else
+              left * right
+end
           end
         RECMA::JS::Property.new(:multiple, return_val)
       end
@@ -86,16 +89,16 @@ module RECMA
       def visit_DivideNode(o)
         left = to_number(o.left.accept(self)).value
         right = to_number(o.value.accept(self)).value
-        return_val = 
-          if [left, right].any? { |x|
+        return_val =
+          if [left, right].any? do |x|
             x.respond_to?(:nan?) && x.nan? ||
             x.respond_to?(:intinite?) && x.infinite?
-          }
+          end
             RECMA::JS::NaN.new
           elsif [left, right].all? { |x| x == 0 }
             RECMA::JS::NaN.new
           elsif right == 0
-            left * (right.eql?(0) ? (1.0/0.0) : (-1.0/0.0))
+            left * (right.eql?(0) ? (1.0 / 0.0) : (-1.0 / 0.0))
           else
             left / right
           end
@@ -105,7 +108,7 @@ module RECMA
       def visit_ModulusNode(o)
         left = to_number(o.left.accept(self)).value
         right = to_number(o.value.accept(self)).value
-        return_val = 
+        return_val =
           if [left, right].any? { |x| x.respond_to?(:nan?) && x.nan? }
             RECMA::JS::NaN.new
           elsif [left, right].all? { |x| x.respond_to?(:infinite?) && x.infinite? }
@@ -147,22 +150,21 @@ module RECMA
         RECMA::JS::Property.new(:undefined, :undefined)
       end
 
-      def visit_NullNode(o)
+      def visit_NullNode(_o)
         RECMA::JS::Property.new(nil, nil)
       end
 
-      def visit_TrueNode(o)
+      def visit_TrueNode(_o)
         RECMA::JS::Property.new(true, true)
       end
 
-      def visit_FalseNode(o)
+      def visit_FalseNode(_o)
         RECMA::JS::Property.new(false, false)
       end
 
       def visit_StringNode(o)
         RECMA::JS::Property.new(:string,
-          o.value.gsub(/\A['"]/, '').gsub(/['"]$/, '')
-        )
+                                o.value.gsub(/\A['"]/, '').gsub(/['"]$/, ''))
       end
 
       def visit_FunctionCallNode(o)
@@ -274,7 +276,7 @@ module RECMA
         v
       end
 
-      %w{
+      %w[
         ArrayNode BitAndNode BitOrNode
         BitXOrNode BracketAccessorNode BreakNode
         CaseBlockNode CaseClauseNode CommaNode ConditionalNode
@@ -294,13 +296,14 @@ module RECMA
         SwitchNode ThrowNode TryNode
         UnsignedRightShiftNode
         WhileNode WithNode
-      }.each do |type|
-        define_method(:"visit_#{type}") do |o|
+      ].each do |type|
+        define_method(:"visit_#{type}") do |_o|
           raise "#{type} not defined"
         end
       end
 
       private
+
       def to_number(object)
         return RECMA::JS::Property.new('0', 0) unless object.value
 
@@ -321,7 +324,7 @@ module RECMA
             else
               case s
               when /^([+-])?Infinity/
-                $1 == '-' ? -1.0/0.0 : 1.0/0.0
+                Regexp.last_match(1) == '-' ? -1.0 / 0.0 : 1.0 / 0.0
               when /\A[-+]?\d+\.\d*(?:[eE][-+]?\d+)?$|\A[-+]?\d+(?:\.\d*)?[eE][-+]?\d+$|\A[-+]?\.\d+(?:[eE][-+]?\d+)?$/, /\A[-+]?0[xX][\da-fA-F]+$|\A[+-]?0[0-7]*$|\A[+-]?\d+$/
                 s.gsub!(/\.(\D)/, '.0\1') if s =~ /\.\w/
                 s.gsub!(/\.$/, '.0') if s =~ /\.$/
@@ -341,6 +344,7 @@ module RECMA
 
       def to_boolean(object)
         return RECMA::JS::Property.new(false, false) unless object.value
+
         value = object.value
         boolean =
           case value
@@ -351,7 +355,7 @@ module RECMA
           when Numeric
             value == 0 || value.respond_to?(:nan?) && value.nan? ? false : true
           when ::String
-            value.length == 0 ? false : true
+            !(value.length == 0)
           when RECMA::JS::Base
             true
           else
@@ -364,12 +368,11 @@ module RECMA
         number = to_number(object)
         value = number.value
         return number if value == 0
-        if value.respond_to?(:nan?) && (value.nan? || value.infinite?)
-          RECMA::JS::Property.new(nil, 0)
-        end
-        value = ((value < 0 ? -1 : 1) * value.abs.floor) % (2 ** 32)
-        if value >= 2 ** 31
-          RECMA::JS::Property.new(nil, value - (2 ** 32))
+
+        RECMA::JS::Property.new(nil, 0) if value.respond_to?(:nan?) && (value.nan? || value.infinite?)
+        value = ((value < 0 ? -1 : 1) * value.abs.floor) % (2**32)
+        if value >= 2**31
+          RECMA::JS::Property.new(nil, value - (2**32))
         else
           RECMA::JS::Property.new(nil, value)
         end
@@ -377,6 +380,7 @@ module RECMA
 
       def to_primitive(object, preferred_type = nil)
         return object unless object.value
+
         case object.value
         when false, true, :undefined, ::String, Numeric
           RECMA::JS::Property.new(nil, object.value)
@@ -386,10 +390,11 @@ module RECMA
       end
 
       def additive_operator(operator, left, right)
-        left, right = to_number(left).value, to_number(right).value
+        left = to_number(left).value
+        right = to_number(right).value
 
-        left = left.respond_to?(:nan?) && left.nan? ? 0.0/0.0 : left
-        right = right.respond_to?(:nan?) && right.nan? ? 0.0/0.0 : right
+        left = left.respond_to?(:nan?) && left.nan? ? 0.0 / 0.0 : left
+        right = right.respond_to?(:nan?) && right.nan? ? 0.0 / 0.0 : right
 
         result = left.send(operator, right)
         result = result.respond_to?(:nan?) && result.nan? ? JS::NaN.new : result
@@ -398,20 +403,18 @@ module RECMA
       end
 
       def call_function(property, arguments = [])
-        function  = property.function || property.value
+        function = property.function || property.value
         case function
         when RECMA::JS::Function
-          scope_chain.new_scope { |chain|
+          scope_chain.new_scope do |chain|
             function.js_call(chain, *arguments)
-          }
+          end
         when UnboundMethod
           RECMA::JS::Property.new(:ruby,
-            function.bind(property.binder).call(*(arguments.map { |x| x.value}))
-          )
+                                  function.bind(property.binder).call(*(arguments.map { |x| x.value })))
         else
           RECMA::JS::Property.new(:ruby,
-            function.call(*(arguments.map { |x| x.value }))
-          )
+                                  function.call(*(arguments.map { |x| x.value })))
         end
       end
     end

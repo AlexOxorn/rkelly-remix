@@ -12,6 +12,7 @@ module RECMA
     def match(scanner)
       match = scanner.check(pattern)
       return Token.new(name, match.to_s, &@block) if match
+
       match
     end
   end

@@ -1,20 +1,20 @@
 module RECMA
   module Visitors
     class DotVisitor < Visitor
-      class Node < Struct.new(:node_id, :fields)
-        ESCAPE = /([<>"\\])/
+      Node = Struct.new(:node_id, :fields) do
+        ESCAPE = /([<>"\\])/.freeze
         def to_s
           counter = 0
-          label = fields.map { |f|
-            s = "<f#{counter}> #{f.to_s.gsub(ESCAPE, '\\\\\1').gsub(/[\r\n]/,' ')}"
+          label = fields.map do |f|
+            s = "<f#{counter}> #{f.to_s.gsub(ESCAPE, '\\\\\1').gsub(/[\r\n]/, ' ')}"
             counter += 1
             s
-          }.join('|')
+          end.join('|')
           "\"#{node_id}\" [\nlabel = \"#{label}\"\nshape = \"record\"\n];"
         end
       end
 
-      class Arrow < Struct.new(:from, :to, :label)
+      Arrow = Struct.new(:from, :to, :label) do
         def to_s
           "\"#{from.node_id}\":f0 -> \"#{to.node_id}\":f0"
         end
@@ -24,16 +24,16 @@ module RECMA
       def initialize
         @stack = []
         @node_index = 0
-        @nodes  = []
+        @nodes = []
         @arrows = []
       end
 
       ## Terminal nodes
-      %w{
+      %w[
         BreakNode ContinueNode EmptyStatementNode FalseNode
         NullNode NumberNode ParameterNode RegexpNode ResolveNode StringNode
         ThisNode TrueNode
-      }.each do |type|
+      ].each do |type|
         define_method(:"visit_#{type}") do |o|
           node = Node.new(@node_index += 1, [type, o.value].compact)
           add_arrow_for(node)
@@ -43,24 +43,24 @@ module RECMA
       ## End Terminal nodes
 
       # Single value nodes
-      %w{
+      %w[
         AssignExprNode BitwiseNotNode BlockNode DeleteNode ElementNode
         ExpressionStatementNode FunctionBodyNode LogicalNotNode ReturnNode
         ThrowNode TypeOfNode UnaryMinusNode UnaryPlusNode VoidNode
-      }.each do |type|
+      ].each do |type|
         define_method(:"visit_#{type}") do |o|
           node = Node.new(@node_index += 1, [type])
           add_arrow_for(node)
           @nodes << node
           @stack.push(node)
-          o.value && o.value.accept(self)
+          o.value&.accept(self)
           @stack.pop
         end
       end
       # End Single value nodes
 
       # Binary nodes
-      %w{
+      %w[
         AddNode BitAndNode BitOrNode BitXOrNode CaseClauseNode CommaNode
         DivideNode DoWhileNode EqualNode GreaterNode GreaterOrEqualNode InNode
         InstanceOfNode LeftShiftNode LessNode LessOrEqualNode LogicalAndNode
@@ -70,57 +70,57 @@ module RECMA
         OpPlusEqualNode OpRShiftEqualNode OpURShiftEqualNode OpXOrEqualNode
         RightShiftNode StrictEqualNode SubtractNode SwitchNode
         UnsignedRightShiftNode WhileNode WithNode
-      }.each do |type|
+      ].each do |type|
         define_method(:"visit_#{type}") do |o|
           node = Node.new(@node_index += 1, [type])
           add_arrow_for(node)
           @nodes << node
           @stack.push(node)
-          o.left && o.left.accept(self)
-          o.value && o.value.accept(self)
+          o.left&.accept(self)
+          o.value&.accept(self)
           @stack.pop
         end
       end
       # End Binary nodes
 
       # Array Value Nodes
-      %w{
+      %w[
         ArgumentsNode ArrayNode CaseBlockNode ConstStatementNode
         ObjectLiteralNode SourceElementsNode VarStatementNode
-      }.each do |type|
+      ].each do |type|
         define_method(:"visit_#{type}") do |o|
           node = Node.new(@node_index += 1, [type])
           add_arrow_for(node)
           @nodes << node
           @stack.push(node)
-          o.value && o.value.each { |v| v && v.accept(self) }
+          o.value&.each { |v| v&.accept(self) }
           @stack.pop
         end
       end
       # END Array Value Nodes
 
       # Name and Value Nodes
-      %w{
+      %w[
         LabelNode PropertyNode GetterPropertyNode SetterPropertyNode VarDeclNode
-      }.each do |type|
+      ].each do |type|
         define_method(:"visit_#{type}") do |o|
           node = Node.new(@node_index += 1, [type, o.name || 'NULL'])
           add_arrow_for(node)
           @nodes << node
           @stack.push(node)
-          o.value && o.value.accept(self)
+          o.value&.accept(self)
           @stack.pop
         end
       end
       # END Name and Value Nodes
 
-      %w{ PostfixNode PrefixNode }.each do |type|
+      %w[PostfixNode PrefixNode].each do |type|
         define_method(:"visit_#{type}") do |o|
           node = Node.new(@node_index += 1, [type, o.value])
           add_arrow_for(node)
           @nodes << node
           @stack.push(node)
-          o.operand && o.operand.accept(self)
+          o.operand&.accept(self)
           @stack.pop
         end
       end
@@ -130,20 +130,20 @@ module RECMA
         add_arrow_for(node)
         @nodes << node
         @stack.push(node)
-        [:init, :test, :counter, :value].each do |method|
-          o.send(method) && o.send(method).accept(self)
+        %i[init test counter value].each do |method|
+          o.send(method)&.accept(self)
         end
         @stack.pop
       end
 
-      %w{ IfNode ConditionalNode }.each do |type|
+      %w[IfNode ConditionalNode].each do |type|
         define_method(:"visit_#{type}") do |o|
           node = Node.new(@node_index += 1, [type])
           add_arrow_for(node)
           @nodes << node
           @stack.push(node)
-          [:conditions, :value, :else].each do |method|
-            o.send(method) && o.send(method).accept(self)
+          %i[conditions value else].each do |method|
+            o.send(method)&.accept(self)
           end
           @stack.pop
         end
@@ -154,8 +154,8 @@ module RECMA
         add_arrow_for(node)
         @nodes << node
         @stack.push(node)
-        [:left, :right, :value].each do |method|
-          o.send(method) && o.send(method).accept(self)
+        %i[left right value].each do |method|
+          o.send(method)&.accept(self)
         end
         @stack.pop
       end
@@ -165,8 +165,8 @@ module RECMA
         add_arrow_for(node)
         @nodes << node
         @stack.push(node)
-        [:value, :catch_block, :finally_block].each do |method|
-          o.send(method) && o.send(method).accept(self)
+        %i[value catch_block finally_block].each do |method|
+          o.send(method)&.accept(self)
         end
         @stack.pop
       end
@@ -176,33 +176,33 @@ module RECMA
         add_arrow_for(node)
         @nodes << node
         @stack.push(node)
-        [:value, :accessor].each do |method|
-          o.send(method) && o.send(method).accept(self)
+        %i[value accessor].each do |method|
+          o.send(method)&.accept(self)
         end
         @stack.pop
       end
 
-      %w{ NewExprNode FunctionCallNode }.each do |type|
+      %w[NewExprNode FunctionCallNode].each do |type|
         define_method(:"visit_#{type}") do |o|
           node = Node.new(@node_index += 1, [type])
           add_arrow_for(node)
           @nodes << node
           @stack.push(node)
-          [:value, :arguments].each do |method|
-            o.send(method) && o.send(method).accept(self)
+          %i[value arguments].each do |method|
+            o.send(method)&.accept(self)
           end
           @stack.pop
         end
       end
 
-      %w{ FunctionExprNode FunctionDeclNode }.each do |type|
+      %w[FunctionExprNode FunctionDeclNode].each do |type|
         define_method(:"visit_#{type}") do |o|
           node = Node.new(@node_index += 1, [type, o.value || 'NULL'])
           add_arrow_for(node)
           @nodes << node
           @stack.push(node)
-          o.arguments.each { |a| a && a.accept(self) }
-          o.function_body && o.function_body.accept(self)
+          o.arguments.each { |a| a&.accept(self) }
+          o.function_body&.accept(self)
           @stack.pop
         end
       end
@@ -213,16 +213,16 @@ module RECMA
         @nodes << node
         @stack.push(node)
         [:value].each do |method|
-          o.send(method) && o.send(method).accept(self)
+          o.send(method)&.accept(self)
         end
         @stack.pop
       end
 
       private
+
       def add_arrow_for(node, label = nil)
         @arrows << Arrow.new(@stack.last, node, label) if @stack.length > 0
       end
-
     end
   end
 end

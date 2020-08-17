@@ -1,9 +1,7 @@
 class NodeTestCase < Test::Unit::TestCase
   include RECMA::Nodes
 
-  if method_defined? :default_test
-    undef :default_test
-  end
+  undef :default_test if method_defined? :default_test
 
   def assert_sexp(expected, actual)
     assert_equal(expected, actual.to_sexp)

@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + "/helper"
+require File.dirname(__FILE__) + '/helper'
 
 class EmptyStatementNodeTest < NodeTestCase
   def test_to_to_sexp

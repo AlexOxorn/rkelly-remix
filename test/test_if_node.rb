@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + "/helper"
+require File.dirname(__FILE__) + '/helper'
 
 class IfNodeTest < NodeTestCase
   def test_to_sexp
@@ -9,9 +9,8 @@ class IfNodeTest < NodeTestCase
     node = IfNode.new(and_node, stmt)
 
     assert_sexp([:if,
-                [:and, [:lit, 5], [:lit, 10]],
-                [:var, [[:var_decl, :foo, [:assign, [:lit, 20]]]]]],
+                 [:and, [:lit, 5], [:lit, 10]],
+                 [:var, [[:var_decl, :foo, [:assign, [:lit, 20]]]]]],
                 node)
-                
   end
 end

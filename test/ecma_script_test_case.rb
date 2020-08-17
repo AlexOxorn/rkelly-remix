@@ -1,9 +1,7 @@
 class ECMAScriptTestCase < Test::Unit::TestCase
   include RECMA::JS
 
-  if method_defined? :default_test
-    undef :default_test
-  end
+  undef :default_test if method_defined? :default_test
 
   def setup
     @runtime = RECMA::Runtime.new

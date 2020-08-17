@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + "/helper"
+require File.dirname(__FILE__) + '/helper'
 
 class CommentsTest < NodeTestCase
   def test_some_comments
@@ -37,7 +37,7 @@ class CommentsTest < NodeTestCase
 
   def test_empty_source_results_in_zero_comments
     parser = RECMA::Parser.new
-    ast = parser.parse("")
+    ast = parser.parse('')
 
     assert ast
     assert_equal(0, ast.comments.length)

@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + "/helper"
+require File.dirname(__FILE__) + '/helper'
 
 class ECMAVisitorTest < Test::Unit::TestCase
   def setup
@@ -90,7 +90,7 @@ class ECMAVisitorTest < Test::Unit::TestCase
     [:ur_shift, '>>>'],
     [:uright_shift_equal, '>>>='],
     [:xor_equal, '^='],
-    [:instanceof, 'instanceof'],
+    [:instanceof, 'instanceof']
   ].each do |name, value|
     define_method(:"test_#{name}_node") do
       assert_to_ecma("10 #{value} 20;")
@@ -98,11 +98,11 @@ class ECMAVisitorTest < Test::Unit::TestCase
   end
 
   def test_while_node
-    assert_to_ecma("while(true) { foo(); }")
+    assert_to_ecma('while(true) { foo(); }')
   end
 
   def test_switch_node
-    assert_to_ecma("switch(a) { }")
+    assert_to_ecma('switch(a) { }')
   end
 
   def test_switch_case_node
@@ -125,45 +125,45 @@ class ECMAVisitorTest < Test::Unit::TestCase
   end
 
   def test_do_while_node
-    assert_to_ecma("do { foo(); } while(true);")
+    assert_to_ecma('do { foo(); } while(true);')
   end
 
   def test_with_node
-    assert_to_ecma("with(o) { foo(); }")
+    assert_to_ecma('with(o) { foo(); }')
   end
 
   def test_const_statement_node
-    assert_to_ecma("const foo;")
+    assert_to_ecma('const foo;')
   end
 
   def test_label_node
-    assert_to_ecma("foo: var foo;")
+    assert_to_ecma('foo: var foo;')
   end
 
   def test_object_literal
-    assert_to_ecma("var foo = { };")
+    assert_to_ecma('var foo = { };')
   end
 
   def test_property
-    assert_to_ecma("var foo = { bar: 10 };")
+    assert_to_ecma('var foo = { bar: 10 };')
   end
 
   def test_getter_node
-    assert_to_ecma("var foo = { get a() { } };")
+    assert_to_ecma('var foo = { get a() { } };')
   end
 
   def test_setter_node
-    assert_to_ecma("var foo = { set a(b) { } };")
+    assert_to_ecma('var foo = { set a(b) { } };')
   end
 
   def test_bracket_access_node
-    assert_to_ecma("var foo = foo.bar[10];")
+    assert_to_ecma('var foo = foo.bar[10];')
   end
 
   def test_new_expr_node
-    assert_to_ecma("var foo = new Array();")
-    assert_to_ecma("var foo = new Array(10);")
-    assert_to_ecma("var foo = new Array(a, 10);")
+    assert_to_ecma('var foo = new Array();')
+    assert_to_ecma('var foo = new Array(10);')
+    assert_to_ecma('var foo = new Array(a, 10);')
   end
 
   def test_try_finally

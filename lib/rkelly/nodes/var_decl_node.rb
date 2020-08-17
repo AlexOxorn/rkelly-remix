@@ -8,8 +8,13 @@ module RKelly
         @constant = constant
       end
 
-      def constant?; @constant; end
-      def variable?; !@constant; end
+      def constant?
+        @constant
+      end
+
+      def variable?
+        !@constant
+      end
     end
   end
 end

@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + "/helper"
+require File.dirname(__FILE__) + '/helper'
 
 class ForNodeTest < NodeTestCase
   def test_failure
@@ -16,9 +16,9 @@ class ForNodeTest < NodeTestCase
 
     node = ForNode.new(stmt, compare, exec, block)
     assert_sexp([:for,
-                [:var, [[:var_decl, :foo, [:assign, [:lit, 10]]]]],
-                [:less, [:resolve, 'foo'], [:lit, 10]],
-                [:postfix, [:resolve, 'foo'], '++'],
-                [:block, [[:var, [[:var_decl, :foo, [:assign, [:lit, 10]]]]]]]], node)
+                 [:var, [[:var_decl, :foo, [:assign, [:lit, 10]]]]],
+                 [:less, [:resolve, 'foo'], [:lit, 10]],
+                 [:postfix, [:resolve, 'foo'], '++'],
+                 [:block, [[:var, [[:var_decl, :foo, [:assign, [:lit, 10]]]]]]]], node)
   end
 end

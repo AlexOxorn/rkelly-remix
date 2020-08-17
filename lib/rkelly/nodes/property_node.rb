@@ -8,6 +8,6 @@ module RECMA
       end
     end
 
-    %w[Getter Setter].each {|node| eval "class #{node}PropertyNode < PropertyNode; end"}
+    %w[Getter Setter].each { |node| eval "class #{node}PropertyNode < PropertyNode; end" }
   end
 end

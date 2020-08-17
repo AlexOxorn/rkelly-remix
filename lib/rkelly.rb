@@ -7,7 +7,7 @@ require 'recma/syntax_error'
 
 module RECMA
   class << self
-    def parse *args
+    def parse(*args)
       RECMA::Parser.new.parse(*args)
     end
   end

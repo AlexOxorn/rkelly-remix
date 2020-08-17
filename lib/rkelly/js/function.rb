@@ -8,9 +8,9 @@ module RECMA
             body = args.pop
             tree = parser.parse("function x(#{args.join(',')}) { #{body} }")
             func = tree.value.first
-            self.new(func.function_body, func.arguments)
+            new(func.function_body, func.arguments)
           else
-            self.new
+            new
           end
         end
       end
@@ -26,13 +26,13 @@ module RECMA
       end
 
       def js_call(scope_chain, *params)
-        arguments.each_with_index { |name, i|
+        arguments.each_with_index do |name, i|
           scope_chain[name.value] = params[i] || RECMA::Runtime::UNDEFINED
-        }
+        end
         function_visitor  = RECMA::Visitors::FunctionVisitor.new(scope_chain)
         eval_visitor      = RECMA::Visitors::EvaluationVisitor.new(scope_chain)
-        body.accept(function_visitor) if body
-        body.accept(eval_visitor) if body
+        body&.accept(function_visitor)
+        body&.accept(eval_visitor)
       end
     end
   end

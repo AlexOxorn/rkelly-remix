@@ -11,8 +11,13 @@ module RECMA
         true
       end
 
-      def +(o); self; end
-      def -(o); self; end
+      def +(_o)
+        self
+      end
+
+      def -(_o)
+        self
+      end
     end
   end
 end

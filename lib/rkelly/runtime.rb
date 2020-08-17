@@ -22,11 +22,11 @@ module RECMA
 
     def call_function(function_name, *args)
       function = @scope[function_name].value
-      @scope.new_scope { |chain|
-        function.js_call(chain, *(args.map { |x|
+      @scope.new_scope do |chain|
+        function.js_call(chain, *(args.map do |x|
           RECMA::JS::Property.new(:param, x)
-        }))
-      }.value
+        end))
+      end.value
     end
 
     def define_function(function, &block)

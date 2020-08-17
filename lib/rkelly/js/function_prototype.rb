@@ -12,4 +12,3 @@ module RECMA
     end
   end
 end
-

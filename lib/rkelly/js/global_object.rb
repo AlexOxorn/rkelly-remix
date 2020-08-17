@@ -8,7 +8,7 @@ module RKelly
         self['NaN'].attributes << :dont_enum
         self['NaN'].attributes << :dont_delete
 
-        self['Infinity']  = 1.0/0.0
+        self['Infinity'] = 1.0 / 0.0
         self['Infinity'].attributes << :dont_enum
         self['Infinity'].attributes << :dont_delete
 

@@ -23,7 +23,7 @@ module RECMA
       "<#{@from}...#{@to}>"
     end
 
-    alias_method :inspect, :to_s
+    alias inspect to_s
 
     # A re-usable empty range
     EMPTY = CharRange.new(CharPos::EMPTY, CharPos::EMPTY)

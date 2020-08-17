@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + "/helper"
+require File.dirname(__FILE__) + '/helper'
 
 class LineNumberTest < NodeTestCase
   def test_line_numbers
@@ -34,11 +34,11 @@ class LineNumberTest < NodeTestCase
     eojs
     func = ast.pointcut(FunctionDeclNode).matches.first
     assert func
-    assert_equal("<{line:4 char:7 (68)}...{line:7 char:7 (135)}>", func.range.to_s)
+    assert_equal('<{line:4 char:7 (68)}...{line:7 char:7 (135)}>', func.range.to_s)
 
     return_node = ast.pointcut(ReturnNode).matches.first
     assert return_node
-    assert_equal("<{line:6 char:9 (115)}...{line:6 char:21 (127)}>", return_node.range.to_s)
+    assert_equal('<{line:6 char:9 (115)}...{line:6 char:21 (127)}>', return_node.range.to_s)
   end
 
   def test_range_of_var_statement_with_semicolon
@@ -50,7 +50,7 @@ class LineNumberTest < NodeTestCase
       };
     eojs
     stmt = ast.pointcut(VarStatementNode).matches.first
-    assert_equal("<{line:1 char:7 (6)}...{line:4 char:8 (60)}>", stmt.range.to_s)
+    assert_equal('<{line:1 char:7 (6)}...{line:4 char:8 (60)}>', stmt.range.to_s)
   end
 
   def test_range_of_var_statement_without_semicolon
@@ -62,7 +62,7 @@ class LineNumberTest < NodeTestCase
       }
     eojs
     stmt = ast.pointcut(VarStatementNode).matches.first
-    assert_equal("<{line:1 char:7 (6)}...{line:4 char:7 (59)}>", stmt.range.to_s)
+    assert_equal('<{line:1 char:7 (6)}...{line:4 char:7 (59)}>', stmt.range.to_s)
   end
 
   def test_range_of_empty_function_body
@@ -73,9 +73,9 @@ class LineNumberTest < NodeTestCase
     eojs
 
     stmt = ast.pointcut(FunctionDeclNode).matches.first
-    assert_equal("<{line:1 char:7 (6)}...{line:2 char:7 (28)}>", stmt.range.to_s)
+    assert_equal('<{line:1 char:7 (6)}...{line:2 char:7 (28)}>', stmt.range.to_s)
 
     stmt = ast.pointcut(FunctionBodyNode).matches.first
-    assert_equal("<{line:1 char:21 (20)}...{line:2 char:7 (28)}>", stmt.range.to_s)
+    assert_equal('<{line:1 char:21 (20)}...{line:2 char:7 (28)}>', stmt.range.to_s)
   end
 end

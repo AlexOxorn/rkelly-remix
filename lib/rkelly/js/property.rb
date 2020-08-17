@@ -10,9 +10,9 @@ module RECMA
         @attributes = attributes
       end
 
-      [:read_only, :dont_enum, :dont_delete, :internal].each do |property|
+      %i[read_only dont_enum dont_delete internal].each do |property|
         define_method(:"#{property}?") do
-          self.attributes.include?(property)
+          attributes.include?(property)
         end
       end
     end

@@ -3,7 +3,7 @@ module RKelly
     class ScopeChain
       include RKelly::JS
 
-      def initialize(scope = Scope.new)
+      def initialize(_scope = Scope.new)
         @chain = [GlobalObject.new]
       end
 
@@ -12,15 +12,16 @@ module RKelly
       end
 
       def has_property?(name)
-        scope = @chain.reverse.find { |x|
+        scope = @chain.reverse.find do |x|
           x.has_property?(name)
-        }
+        end
         scope ? scope[name] : nil
       end
-      
+
       def [](name)
         property = has_property?(name)
         return property if property
+
         @chain.last.properties[name]
       end
 
@@ -36,7 +37,7 @@ module RKelly
         @chain.last
       end
 
-      def new_scope(&block)
+      def new_scope
         @chain << Scope.new
         result = yield(self)
         @chain.pop
@@ -47,7 +48,9 @@ module RKelly
         @chain.last.return = value
       end
 
-      def return; @chain.last.return; end
+      def return
+        @chain.last.return
+      end
 
       def returned?
         @chain.last.returned?

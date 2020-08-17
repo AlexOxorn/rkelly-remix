@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + "/../helper"
+require File.dirname(__FILE__) + '/../helper'
 
 class Expressions_11_4_4_Test < ECMAScriptTestCase
   def test_uninitialized
@@ -10,32 +10,32 @@ class Expressions_11_4_4_Test < ECMAScriptTestCase
   end
 
   @@tests = [
-    :undefined          => ['(void 0)', 'NaN'],
-    :null               => ['null', '1'],
-    :true               => ['true', '2'],
-    :false              => ['false', '1'],
-    :positive_infinity  => ['Number.POSITIVE_INFINITY',
-                            'Number.POSITIVE_INFINITY'],
-    :negative_infinity  => ['Number.NEGATIVE_INFINITY',
-                            'Number.NEGATIVE_INFINITY'],
-    :nan                => ['Number.NaN', 'Number.NaN'],
-    :zero               => ['0', '1'],
+    undefined: ['(void 0)', 'NaN'],
+    null: %w[null 1],
+    true: %w[true 2],
+    false: %w[false 1],
+    positive_infinity: ['Number.POSITIVE_INFINITY',
+                        'Number.POSITIVE_INFINITY'],
+    negative_infinity: ['Number.NEGATIVE_INFINITY',
+                        'Number.NEGATIVE_INFINITY'],
+    nan: ['Number.NaN', 'Number.NaN'],
+    zero: %w[0 1],
     #:pos_float          => ['0.2345', '1.2345'],
     #:neg_float          => ['-0.2345', '0.7655'],
-    :boolean_false      => ['new Boolean(false)', '1'],
-    :boolean_true       => ['new Boolean(true)', '2'],
-    :string_string      => ["'string'", 'Number.NaN'],
-    :number_s           => ["'12345'", '12346'],
-    :negative_s         => ["'-12345'", '-12344'],
-    :hex_s              => ["'0Xf'", '16'],
-    :num_0_s            => ["'077'", '78'],
-    :empty_s            => ["''", '1'],
-    :obj_string_string  => ['new String("string")', 'Number.NaN'],
-    :obj_string_num     => ['new String("12345")', '12346'],
-    :obj_negative       => ['new String("-12345")', '-12344'],
-    :obj_hex            => ['new String("0Xf")', '16'],
-    :obj_0_s            => ['new String("077")', '78'],
-    :obj_empty          => ['new String("")', '1'],
+    boolean_false: ['new Boolean(false)', '1'],
+    boolean_true: ['new Boolean(true)', '2'],
+    string_string: ["'string'", 'Number.NaN'],
+    number_s: ["'12345'", '12346'],
+    negative_s: ["'-12345'", '-12344'],
+    hex_s: ["'0Xf'", '16'],
+    num_0_s: ["'077'", '78'],
+    empty_s: ["''", '1'],
+    obj_string_string: ['new String("string")', 'Number.NaN'],
+    obj_string_num: ['new String("12345")', '12346'],
+    obj_negative: ['new String("-12345")', '-12344'],
+    obj_hex: ['new String("0Xf")', '16'],
+    obj_0_s: ['new String("077")', '78'],
+    obj_empty: ['new String("")', '1']
   ]
 
   def test_positive_float

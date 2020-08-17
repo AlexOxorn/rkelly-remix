@@ -1,4 +1,4 @@
 module RECMA
-  class SyntaxError < ::SyntaxError
+  class SyntaxError < RuntimeError
   end
 end

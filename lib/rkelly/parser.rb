@@ -1,13 +1,13 @@
 require 'recma/tokenizer'
 require 'recma/generated_parser'
 
-
 module RECMA
   class Parser < RECMA::GeneratedParser
     TOKENIZER = Tokenizer.new
 
     RECMA::GeneratedParser.instance_methods.each do |im|
       next unless im.to_s =~ /^_reduce_\d+$/
+
       eval(<<-eoawesomehack)
         def #{im}(val, _values, result)
           r = super(val.map { |v|
@@ -46,7 +46,7 @@ module RECMA
     end
 
     def yyabort
-      raise "something bad happened, please report a bug with sample JavaScript"
+      raise 'something bad happened, please report a bug with sample JavaScript'
     end
 
     # When parsing finishes without all tokens being parsed, returns
@@ -56,14 +56,11 @@ module RECMA
     #
     # Useful for pin-pointing the position of a syntax error.
     def stopped_at
-      if @position < @tokens.length
-        @tokens[@position-1]
-      else
-        nil
-      end
+      @tokens[@position - 1] if @position < @tokens.length
     end
 
     private
+
     def on_error(error_token_id, error_value, value_stack)
       if logger
         logger.error(token_to_str(error_token_id))
@@ -74,22 +71,24 @@ module RECMA
 
     def next_token
       @terminator = false
-      begin
+      loop do
         return [false, false] if @position >= @tokens.length
+
         n_token = @tokens[@position]
         @position += 1
         case @tokens[@position - 1].name
         when :COMMENT
           @comments << n_token
-          @terminator = true if n_token.value =~ /^\/\//
+          @terminator = true if n_token.value =~ %r{^//}
         when :S
           @terminator = true if n_token.value =~ /[\r\n]/
         end
-      end while([:COMMENT, :S].include?(n_token.name))
+        break unless %i[COMMENT S].include?(n_token.name)
+      end
 
       if @terminator &&
-          ((@prev_token && %w[continue break return throw].include?(@prev_token.value)) ||
-           (n_token && %w[++ --].include?(n_token.value)))
+         ((@prev_token && %w[continue break return throw].include?(@prev_token.value)) ||
+          (n_token && %w[++ --].include?(n_token.value)))
         @position -= 1
         return (@prev_token = RECMA::Token.new(';', ';')).to_racc_token
       end

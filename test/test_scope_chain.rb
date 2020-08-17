@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + "/helper"
+require File.dirname(__FILE__) + '/helper'
 
 class TestScopeChain < Test::Unit::TestCase
   def setup
@@ -40,11 +40,11 @@ class TestScopeChain < Test::Unit::TestCase
 
   def test_chain_in_block
     assert !@scope_chain.has_property?(:baz)
-    @scope_chain.new_scope { |chain|
+    @scope_chain.new_scope do |chain|
       chain[:baz] = 10
       assert @scope_chain.has_property?(:baz)
       assert chain.has_property?(:baz)
-    }
+    end
     assert @scope_chain.has_property?(:baz).nil?
   end
 end

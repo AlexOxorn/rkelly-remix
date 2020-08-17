@@ -12,12 +12,10 @@ module RKelly
       end
 
       def visit_FunctionDeclNode(o)
-        if o.value
-          scope_chain[o.value].value = RKelly::JS::Function.new(o.function_body, o.arguments)
-        end
+        scope_chain[o.value].value = RKelly::JS::Function.new(o.function_body, o.arguments) if o.value
       end
 
-      %w{
+      %w[
         AddNode ArgumentsNode ArrayNode AssignExprNode BitAndNode BitOrNode
         BitXOrNode BitwiseNotNode BlockNode BracketAccessorNode BreakNode
         CaseBlockNode CaseClauseNode CommaNode ConditionalNode
@@ -37,7 +35,7 @@ module RKelly
         SubtractNode SwitchNode ThisNode ThrowNode TrueNode TryNode TypeOfNode
         UnaryMinusNode UnaryPlusNode UnsignedRightShiftNode VarDeclNode
         VarStatementNode VoidNode WhileNode WithNode
-      }.each do |type|
+      ].each do |type|
         define_method(:"visit_#{type}") do |o|
         end
       end

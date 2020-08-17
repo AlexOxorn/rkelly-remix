@@ -4,7 +4,8 @@ module RECMA
       class << self
         def create(*args)
           return false if args.length == 0
-          self.new(args.first)
+
+          new(args.first)
         end
       end
       def initialize(*args)

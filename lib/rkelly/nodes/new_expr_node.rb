@@ -1,4 +1,4 @@
-module RKelly
+module RECMA
   module Nodes
     class NewExprNode < Node
       attr_reader :arguments

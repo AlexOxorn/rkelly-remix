@@ -1,4 +1,4 @@
-module RKelly
+module RECMA
   module JS
     class Base
       attr_reader :properties, :return, :value
@@ -18,7 +18,7 @@ module RKelly
         if properties['prototype'].value != :undefined
           properties['prototype'].value[name]
         else
-          RKelly::Runtime::UNDEFINED
+          RECMA::Runtime::UNDEFINED
         end
       end
 
@@ -64,10 +64,10 @@ module RKelly
         case hint
         when 'Number'
           value_of = self['valueOf']
-          return value_of if value_of.function || value_of.value.is_a?(RKelly::JS::Function)
+          return value_of if value_of.function || value_of.value.is_a?(RECMA::JS::Function)
 
           to_string = self['toString']
-          return to_string if to_string.function || to_string.value.is_a?(RKelly::JS::Function)
+          return to_string if to_string.function || to_string.value.is_a?(RECMA::JS::Function)
         end
       end
 
@@ -84,12 +84,12 @@ module RKelly
 
       def unbound_method(name, object_id = nil, &block)
         name = "#{name}_#{self.class.to_s.split('::').last}_#{object_id}"
-        unless RKelly::JS::Base.instance_methods.include?(name.to_sym)
-          RKelly::JS::Base.class_eval do
+        unless RECMA::JS::Base.instance_methods.include?(name.to_sym)
+          RECMA::JS::Base.class_eval do
             define_method(name, &block)
           end
         end
-        RKelly::JS::Base.instance_method(name)
+        RECMA::JS::Base.instance_method(name)
       end
     end
   end

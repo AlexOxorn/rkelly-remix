@@ -1,8 +1,8 @@
-module RKelly
+module RECMA
   module Nodes
     class Node
-      include RKelly::Visitable
-      include RKelly::Visitors
+      include RECMA::Visitable
+      include RECMA::Visitors
       include Enumerable
 
       attr_accessor :value, :comments, :range, :filename
@@ -32,12 +32,12 @@ module RKelly
       # #matches can be invoked to get the list of AST nodes that
       # matched.
       #
-      #     ast.pointcut(RKelly::Nodes::IfNode).matches --> array of nodes
+      #     ast.pointcut(RECMA::Nodes::IfNode).matches --> array of nodes
       #
       def pointcut(pattern)
         case pattern
         when String
-          ast = RKelly::Parser.new.parse(pattern)
+          ast = RECMA::Parser.new.parse(pattern)
           # Only take the first statement
           finder = if ast.value.first.class.to_s =~ /StatementNode$/
                      ast.value.first.value

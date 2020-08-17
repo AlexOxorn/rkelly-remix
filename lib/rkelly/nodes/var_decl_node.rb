@@ -1,4 +1,4 @@
-module RKelly
+module RECMA
   module Nodes
     class VarDeclNode < Node
       attr_accessor :name, :type

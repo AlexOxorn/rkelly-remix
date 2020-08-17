@@ -1,4 +1,4 @@
-module RKelly
+module RECMA
   class Runtime
     class RubyFunction
       def initialize(&block)

@@ -1,4 +1,4 @@
-module RKelly
+module RECMA
   module Nodes
     class FunctionCallNode < Node
       attr_reader :arguments

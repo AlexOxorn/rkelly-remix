@@ -4,9 +4,9 @@ require 'hoe'
 Hoe.plugin :gemspec # `gem install hoe-gemspec`
 Hoe.plugin :git     # `gem install hoe-git`
 
-GENERATED_PARSER = 'lib/rkelly/generated_parser.rb'.freeze
+GENERATED_PARSER = 'lib/recma/generated_parser.rb'.freeze
 
-HOE = Hoe.spec('rkelly-remix') do |_p|
+HOE = Hoe.spec('recma-remix') do |_p|
   developer('Aaron Patterson', 'aaron.patterson@gmail.com')
   developer('Rene Saarsoo', 'rene.saarsoo@sencha.com')
   self.readme_file   = 'README.rdoc'

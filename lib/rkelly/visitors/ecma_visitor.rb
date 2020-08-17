@@ -257,9 +257,10 @@ module RKelly
         @indent += 1
         lit = "{" + (o.value.length > 0 ? "\n" : ' ') +
           o.value.map { |x| "#{indent}#{x.accept(self)}" }.join(",\n") +
-          (o.value.length > 0 ? "\n" : '') + '}'
-        @indent -= 1
-        lit
+          begin
+            @indent -= 1
+            (o.value.length > 0 ? "\n#{indent}}" : '}')
+          end
       end
 
       def visit_PropertyNode(o)

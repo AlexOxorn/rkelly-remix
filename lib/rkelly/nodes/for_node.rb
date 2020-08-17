@@ -1,4 +1,4 @@
-module RKelly
+module RECMA
   module Nodes
     class ForNode < Node
       attr_reader :init, :test, :counter

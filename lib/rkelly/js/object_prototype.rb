@@ -1,4 +1,4 @@
-module RKelly
+module RECMA
   module JS
     # This is the object protytpe
     # ECMA-262 15.2.4

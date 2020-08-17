@@ -1,10 +1,10 @@
-module RKelly
+module RECMA
   module JS
     class Function < Base
       class << self
         def create(*args)
           if args.length > 0
-            parser = RKelly::Parser.new
+            parser = RECMA::Parser.new
             body = args.pop
             tree = parser.parse("function x(#{args.join(',')}) { #{body} }")
             func = tree.value.first
@@ -27,10 +27,10 @@ module RKelly
 
       def js_call(scope_chain, *params)
         arguments.each_with_index { |name, i|
-          scope_chain[name.value] = params[i] || RKelly::Runtime::UNDEFINED
+          scope_chain[name.value] = params[i] || RECMA::Runtime::UNDEFINED
         }
-        function_visitor  = RKelly::Visitors::FunctionVisitor.new(scope_chain)
-        eval_visitor      = RKelly::Visitors::EvaluationVisitor.new(scope_chain)
+        function_visitor  = RECMA::Visitors::FunctionVisitor.new(scope_chain)
+        eval_visitor      = RECMA::Visitors::EvaluationVisitor.new(scope_chain)
         body.accept(function_visitor) if body
         body.accept(eval_visitor) if body
       end

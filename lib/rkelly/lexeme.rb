@@ -1,6 +1,6 @@
-require 'rkelly/token'
+require 'recma/token'
 
-module RKelly
+module RECMA
   class Lexeme
     attr_reader :name, :pattern
     def initialize(name, pattern, &block)

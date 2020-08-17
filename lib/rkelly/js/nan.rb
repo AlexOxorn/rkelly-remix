@@ -1,4 +1,4 @@
-module RKelly
+module RECMA
   module JS
     # Class to represent Not A Number
     # In Ruby NaN != NaN, but in JS, NaN == NaN

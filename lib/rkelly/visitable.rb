@@ -1,4 +1,4 @@
-module RKelly
+module RECMA
   module Visitable
     # Based off the visitor pattern from RubyGarden
     def accept(visitor, &block)

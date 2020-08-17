@@ -1,4 +1,4 @@
-module RKelly
+module RECMA
   module Nodes
     class DotAccessorNode < Node
       attr_reader :accessor

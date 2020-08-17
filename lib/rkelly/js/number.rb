@@ -1,4 +1,4 @@
-module RKelly
+module RECMA
   module JS
     class Number < Base
       class << self

@@ -1,4 +1,4 @@
-module RKelly
+module RECMA
   module Nodes
     class FunctionExprNode < Node
       attr_reader :function_body, :arguments

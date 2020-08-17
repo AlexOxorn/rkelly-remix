@@ -1,4 +1,4 @@
-module RKelly
+module RECMA
   module Visitors
     class DotVisitor < Visitor
       class Node < Struct.new(:node_id, :fields)

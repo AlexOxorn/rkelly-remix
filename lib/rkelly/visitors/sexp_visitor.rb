@@ -1,4 +1,4 @@
-module RKelly
+module RECMA
   module Visitors
     class SexpVisitor < Visitor
       def visit_NumberNode(o)

@@ -1,4 +1,4 @@
-module RKelly
+module RECMA
   module Nodes
     class PropertyNode < Node
       attr_reader :name

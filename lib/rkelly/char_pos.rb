@@ -1,5 +1,5 @@
 
-module RKelly
+module RECMA
   # Represents a character position in source code.
   #
   # It's a value object - it can't be modified.

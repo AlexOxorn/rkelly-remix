@@ -1,4 +1,4 @@
-module RKelly
+module RECMA
   class Token
     attr_accessor :name, :value, :transformer, :range
     def initialize(name, value, &transformer)

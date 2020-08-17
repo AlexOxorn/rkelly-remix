@@ -1,4 +1,4 @@
-module RKelly
+module RECMA
   module Visitors
     class EvaluationVisitor < Visitor
       attr_reader :scope_chain
@@ -54,7 +54,7 @@ module RKelly
         right = to_primitive(o.value.accept(self), 'Number')
 
         if left.value.is_a?(::String) || right.value.is_a?(::String)
-          RKelly::JS::Property.new(:add,
+          RECMA::JS::Property.new(:add,
             "#{left.value}#{right.value}"
           )
         else
@@ -63,7 +63,7 @@ module RKelly
       end
 
       def visit_SubtractNode(o)
-        RKelly::JS::Property.new(:subtract,
+        RECMA::JS::Property.new(:subtract,
           o.left.accept(self).value - o.value.accept(self).value
         )
       end
@@ -73,14 +73,14 @@ module RKelly
         right = to_number(o.value.accept(self)).value
         return_val = 
           if [left, right].any? { |x| x.respond_to?(:nan?) && x.nan? }
-            RKelly::JS::NaN.new
+            RECMA::JS::NaN.new
           else
             [left, right].any? { |x|
               x.respond_to?(:intinite?) && x.infinite?
             } && [left, right].any? { |x| x == 0
-            } ? RKelly::JS::NaN.new : left * right
+            } ? RECMA::JS::NaN.new : left * right
           end
-        RKelly::JS::Property.new(:multiple, return_val)
+        RECMA::JS::Property.new(:multiple, return_val)
       end
 
       def visit_DivideNode(o)
@@ -91,15 +91,15 @@ module RKelly
             x.respond_to?(:nan?) && x.nan? ||
             x.respond_to?(:intinite?) && x.infinite?
           }
-            RKelly::JS::NaN.new
+            RECMA::JS::NaN.new
           elsif [left, right].all? { |x| x == 0 }
-            RKelly::JS::NaN.new
+            RECMA::JS::NaN.new
           elsif right == 0
             left * (right.eql?(0) ? (1.0/0.0) : (-1.0/0.0))
           else
             left / right
           end
-        RKelly::JS::Property.new(:divide, return_val)
+        RECMA::JS::Property.new(:divide, return_val)
       end
 
       def visit_ModulusNode(o)
@@ -107,19 +107,19 @@ module RKelly
         right = to_number(o.value.accept(self)).value
         return_val = 
           if [left, right].any? { |x| x.respond_to?(:nan?) && x.nan? }
-            RKelly::JS::NaN.new
+            RECMA::JS::NaN.new
           elsif [left, right].all? { |x| x.respond_to?(:infinite?) && x.infinite? }
-            RKelly::JS::NaN.new
+            RECMA::JS::NaN.new
           elsif right == 0
-            RKelly::JS::NaN.new
+            RECMA::JS::NaN.new
           elsif left.respond_to?(:infinite?) && left.infinite?
-            RKelly::JS::NaN.new
+            RECMA::JS::NaN.new
           elsif right.respond_to?(:infinite?) && right.infinite?
             left
           else
             left % right
           end
-        RKelly::JS::Property.new(:divide, return_val)
+        RECMA::JS::Property.new(:divide, return_val)
       end
 
       def visit_OpEqualNode(o)
@@ -139,28 +139,28 @@ module RKelly
       end
 
       def visit_NumberNode(o)
-        RKelly::JS::Property.new(o.value, o.value)
+        RECMA::JS::Property.new(o.value, o.value)
       end
 
       def visit_VoidNode(o)
         o.value.accept(self)
-        RKelly::JS::Property.new(:undefined, :undefined)
+        RECMA::JS::Property.new(:undefined, :undefined)
       end
 
       def visit_NullNode(o)
-        RKelly::JS::Property.new(nil, nil)
+        RECMA::JS::Property.new(nil, nil)
       end
 
       def visit_TrueNode(o)
-        RKelly::JS::Property.new(true, true)
+        RECMA::JS::Property.new(true, true)
       end
 
       def visit_FalseNode(o)
-        RKelly::JS::Property.new(false, false)
+        RECMA::JS::Property.new(false, false)
       end
 
       def visit_StringNode(o)
-        RKelly::JS::Property.new(:string,
+        RECMA::JS::Property.new(:string,
           o.value.gsub(/\A['"]/, '').gsub(/['"]$/, '')
         )
       end
@@ -186,7 +186,7 @@ module RKelly
         left = o.left.accept(self)
         right = o.value.accept(self)
 
-        RKelly::JS::Property.new(:equal_node, left.value == right.value)
+        RECMA::JS::Property.new(:equal_node, left.value == right.value)
       end
 
       def visit_BlockNode(o)
@@ -205,7 +205,7 @@ module RKelly
       def visit_BitwiseNotNode(o)
         orig = o.value.accept(self)
         number = to_int_32(orig)
-        RKelly::JS::Property.new(nil, ~number.value)
+        RECMA::JS::Property.new(nil, ~number.value)
       end
 
       def visit_PostfixNode(o)
@@ -244,21 +244,21 @@ module RKelly
 
       def visit_TypeOfNode(o)
         val = o.value.accept(self)
-        return RKelly::JS::Property.new(:string, 'object') if val.value.nil?
+        return RECMA::JS::Property.new(:string, 'object') if val.value.nil?
 
         case val.value
         when String
-          RKelly::JS::Property.new(:string, 'string')
+          RECMA::JS::Property.new(:string, 'string')
         when Numeric
-          RKelly::JS::Property.new(:string, 'number')
+          RECMA::JS::Property.new(:string, 'number')
         when true
-          RKelly::JS::Property.new(:string, 'boolean')
+          RECMA::JS::Property.new(:string, 'boolean')
         when false
-          RKelly::JS::Property.new(:string, 'boolean')
+          RECMA::JS::Property.new(:string, 'boolean')
         when :undefined
-          RKelly::JS::Property.new(:string, 'undefined')
+          RECMA::JS::Property.new(:string, 'undefined')
         else
-          RKelly::JS::Property.new(:object, 'object')
+          RECMA::JS::Property.new(:object, 'object')
         end
       end
 
@@ -302,12 +302,12 @@ module RKelly
 
       private
       def to_number(object)
-        return RKelly::JS::Property.new('0', 0) unless object.value
+        return RECMA::JS::Property.new('0', 0) unless object.value
 
         return_val =
           case object.value
           when :undefined
-            RKelly::JS::NaN.new
+            RECMA::JS::NaN.new
           when false
             0
           when true
@@ -330,17 +330,17 @@ module RKelly
                 s = s.gsub(/^[0]*/, '') if /^0[1-9]+$/.match(s)
                 eval(s)
               else
-                RKelly::JS::NaN.new
+                RECMA::JS::NaN.new
               end
             end
-          when RKelly::JS::Base
+          when RECMA::JS::Base
             return to_number(to_primitive(object, 'Number'))
           end
-        RKelly::JS::Property.new(nil, return_val)
+        RECMA::JS::Property.new(nil, return_val)
       end
 
       def to_boolean(object)
-        return RKelly::JS::Property.new(false, false) unless object.value
+        return RECMA::JS::Property.new(false, false) unless object.value
         value = object.value
         boolean =
           case value
@@ -352,12 +352,12 @@ module RKelly
             value == 0 || value.respond_to?(:nan?) && value.nan? ? false : true
           when ::String
             value.length == 0 ? false : true
-          when RKelly::JS::Base
+          when RECMA::JS::Base
             true
           else
             raise
           end
-        RKelly::JS::Property.new(boolean, boolean)
+        RECMA::JS::Property.new(boolean, boolean)
       end
 
       def to_int_32(object)
@@ -365,13 +365,13 @@ module RKelly
         value = number.value
         return number if value == 0
         if value.respond_to?(:nan?) && (value.nan? || value.infinite?)
-          RKelly::JS::Property.new(nil, 0)
+          RECMA::JS::Property.new(nil, 0)
         end
         value = ((value < 0 ? -1 : 1) * value.abs.floor) % (2 ** 32)
         if value >= 2 ** 31
-          RKelly::JS::Property.new(nil, value - (2 ** 32))
+          RECMA::JS::Property.new(nil, value - (2 ** 32))
         else
-          RKelly::JS::Property.new(nil, value)
+          RECMA::JS::Property.new(nil, value)
         end
       end
 
@@ -379,8 +379,8 @@ module RKelly
         return object unless object.value
         case object.value
         when false, true, :undefined, ::String, Numeric
-          RKelly::JS::Property.new(nil, object.value)
-        when RKelly::JS::Base
+          RECMA::JS::Property.new(nil, object.value)
+        when RECMA::JS::Base
           call_function(object.value.default_value(preferred_type))
         end
       end
@@ -394,22 +394,22 @@ module RKelly
         result = left.send(operator, right)
         result = result.respond_to?(:nan?) && result.nan? ? JS::NaN.new : result
 
-        RKelly::JS::Property.new(operator, result)
+        RECMA::JS::Property.new(operator, result)
       end
 
       def call_function(property, arguments = [])
         function  = property.function || property.value
         case function
-        when RKelly::JS::Function
+        when RECMA::JS::Function
           scope_chain.new_scope { |chain|
             function.js_call(chain, *arguments)
           }
         when UnboundMethod
-          RKelly::JS::Property.new(:ruby,
+          RECMA::JS::Property.new(:ruby,
             function.bind(property.binder).call(*(arguments.map { |x| x.value}))
           )
         else
-          RKelly::JS::Property.new(:ruby,
+          RECMA::JS::Property.new(:ruby,
             function.call(*(arguments.map { |x| x.value }))
           )
         end

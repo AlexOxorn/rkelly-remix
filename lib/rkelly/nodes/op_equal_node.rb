@@ -1,4 +1,4 @@
-module RKelly
+module RECMA
   module Nodes
     class OpEqualNode < Node
       attr_reader :left

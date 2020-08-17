@@ -1,12 +1,12 @@
-require 'rkelly/tokenizer'
-require 'rkelly/generated_parser'
+require 'recma/tokenizer'
+require 'recma/generated_parser'
 
 
-module RKelly
-  class Parser < RKelly::GeneratedParser
+module RECMA
+  class Parser < RECMA::GeneratedParser
     TOKENIZER = Tokenizer.new
 
-    RKelly::GeneratedParser.instance_methods.each do |im|
+    RECMA::GeneratedParser.instance_methods.each do |im|
       next unless im.to_s =~ /^_reduce_\d+$/
       eval(<<-eoawesomehack)
         def #{im}(val, _values, result)
@@ -91,7 +91,7 @@ module RKelly
           ((@prev_token && %w[continue break return throw].include?(@prev_token.value)) ||
            (n_token && %w[++ --].include?(n_token.value)))
         @position -= 1
-        return (@prev_token = RKelly::Token.new(';', ';')).to_racc_token
+        return (@prev_token = RECMA::Token.new(';', ';')).to_racc_token
       end
 
       @prev_token = n_token

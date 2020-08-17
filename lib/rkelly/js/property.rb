@@ -1,4 +1,4 @@
-module RKelly
+module RECMA
   module JS
     class Property
       attr_accessor :name, :value, :attributes, :function, :binder

@@ -1,6 +1,6 @@
-require 'rkelly/char_pos'
+require 'recma/char_pos'
 
-module RKelly
+module RECMA
   # Represents a syntax element location in source code - where it
   # begins and where it ends.
   #

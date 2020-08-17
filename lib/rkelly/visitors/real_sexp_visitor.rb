@@ -1,4 +1,4 @@
-module RKelly
+module RECMA
   module Visitors
     class RealSexpVisitor < Visitor
       ALL_NODES.each do |type|

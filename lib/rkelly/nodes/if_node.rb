@@ -1,4 +1,4 @@
-module RKelly
+module RECMA
   module Nodes
     class IfNode < Node
       attr_reader :conditions, :else

@@ -1,4 +1,4 @@
-module RKelly
+module RECMA
   module Nodes
     class TryNode < Node
       attr_reader :catch_var, :catch_block, :finally_block

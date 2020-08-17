@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + "/../helper"
+require File.dirname(__FILE__) + '/../helper'
 
 # ECMA-262
 # Section 15.1.1.3

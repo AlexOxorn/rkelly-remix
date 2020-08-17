@@ -1,10 +1,10 @@
-module RKelly
+module RECMA
   module Visitable
     # Based off the visitor pattern from RubyGarden
     def accept(visitor, &block)
-      klass = self.class.ancestors.find { |ancestor|
+      klass = self.class.ancestors.find do |ancestor|
         visitor.respond_to?("visit_#{ancestor.name.split(/::/)[-1]}")
-      }
+      end
 
       if klass
         visitor.send(:"visit_#{klass.name.split(/::/)[-1]}", self, &block)

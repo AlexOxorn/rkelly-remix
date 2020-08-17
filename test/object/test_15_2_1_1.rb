@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + "/../helper"
+require File.dirname(__FILE__) + '/../helper'
 
 class Object_15_2_1_1_Test < ECMAScriptTestCase
   def test_null_value_of
@@ -28,7 +28,7 @@ class Object_15_2_1_1_Test < ECMAScriptTestCase
   end
 
   def test_true_value_of
-    js_assert_equal("true", 'Object(true).valueOf()')
+    js_assert_equal('true', 'Object(true).valueOf()')
   end
 
   def test_true_to_string
@@ -40,7 +40,7 @@ class Object_15_2_1_1_Test < ECMAScriptTestCase
   end
 
   def test_false_value_of
-    js_assert_equal("false", 'Object(false).valueOf()')
+    js_assert_equal('false', 'Object(false).valueOf()')
   end
 
   def test_false_type_of
@@ -56,7 +56,7 @@ class Object_15_2_1_1_Test < ECMAScriptTestCase
   end
 
   def test_0_value_of
-    js_assert_equal("0", 'Object(0).valueOf()')
+    js_assert_equal('0', 'Object(0).valueOf()')
   end
 
   def test_0_type_of
@@ -73,7 +73,7 @@ class Object_15_2_1_1_Test < ECMAScriptTestCase
 
   # Diverts from the ECMA.  In ECMA, -0 is -0, not 0
   def test_minus_0_value_of
-    js_assert_equal("0", 'Object(-0).valueOf()')
+    js_assert_equal('0', 'Object(-0).valueOf()')
   end
 
   def test_minus_0_type_of
@@ -90,7 +90,7 @@ class Object_15_2_1_1_Test < ECMAScriptTestCase
   ## END Diversion. ;-)
 
   def test_1_value_of
-    js_assert_equal("1", 'Object(1).valueOf()')
+    js_assert_equal('1', 'Object(1).valueOf()')
   end
 
   def test_1_type_of
@@ -106,7 +106,7 @@ class Object_15_2_1_1_Test < ECMAScriptTestCase
   end
 
   def test_minus_1_value_of
-    js_assert_equal("-1", 'Object(-1).valueOf()')
+    js_assert_equal('-1', 'Object(-1).valueOf()')
   end
 
   def test_minus_1_type_of
@@ -122,7 +122,7 @@ class Object_15_2_1_1_Test < ECMAScriptTestCase
   end
 
   def test_number_max_value_of
-    js_assert_equal("1.797693134862315e308", 'Object(Number.MAX_VALUE).valueOf()')
+    js_assert_equal('1.797693134862315e308', 'Object(Number.MAX_VALUE).valueOf()')
   end
 
   def test_number_max_type_of
@@ -138,7 +138,7 @@ class Object_15_2_1_1_Test < ECMAScriptTestCase
   end
 
   def test_number_min_value_of
-    js_assert_equal("1.0e-306", 'Object(Number.MIN_VALUE).valueOf()')
+    js_assert_equal('1.0e-306', 'Object(Number.MIN_VALUE).valueOf()')
   end
 
   def test_number_min_type_of
@@ -155,7 +155,7 @@ class Object_15_2_1_1_Test < ECMAScriptTestCase
 
   def test_number_positive_infinity_value
     js_assert_equal(
-      "Number.POSITIVE_INFINITY",
+      'Number.POSITIVE_INFINITY',
       'Object(Number.POSITIVE_INFINITY).valueOf()'
     )
   end
@@ -174,7 +174,7 @@ class Object_15_2_1_1_Test < ECMAScriptTestCase
 
   def test_number_negative_infinity_value
     js_assert_equal(
-      "Number.NEGATIVE_INFINITY",
+      'Number.NEGATIVE_INFINITY',
       'Object(Number.NEGATIVE_INFINITY).valueOf()'
     )
   end
@@ -192,7 +192,7 @@ class Object_15_2_1_1_Test < ECMAScriptTestCase
   end
 
   def test_nan_value
-    js_assert_equal("Number.NaN", 'Object(Number.NaN).valueOf()')
+    js_assert_equal('Number.NaN', 'Object(Number.NaN).valueOf()')
   end
 
   def test_number_nan_type

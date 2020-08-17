@@ -35,7 +35,7 @@ module RKelly
 
       def visit_ForNode(o)
         init    = o.init ? o.init.accept(self) : ';'
-        init    << ';' unless init.end_with? ';' # make sure it has a ;
+        init << ';' unless init.end_with? ';' # make sure it has a ;
         test    = o.test ? o.test.accept(self) : ''
         counter = o.counter ? o.counter.accept(self) : ''
         "for(#{init} #{test}; #{counter}) #{o.value.accept(self)}"
@@ -59,7 +59,7 @@ module RKelly
 
       def visit_BlockNode(o)
         @indent += 1
-        "{\n#{o.value.accept(self)}\n#{@indent -=1; indent}}"
+        "{\n#{o.value.accept(self)}\n#{@indent -= 1; indent}}"
       end
 
       def visit_ExpressionStatementNode(o)
@@ -82,8 +82,8 @@ module RKelly
         o.value
       end
 
-      def visit_NullNode(o)
-        "null"
+      def visit_NullNode(_o)
+        'null'
       end
 
       def visit_FunctionDeclNode(o)
@@ -96,26 +96,26 @@ module RKelly
 
       def visit_FunctionBodyNode(o)
         @indent += 1
-        "{\n#{o.value.accept(self)}\n#{@indent -=1; indent}}"
+        "{\n#{o.value.accept(self)}\n#{@indent -= 1; indent}}"
       end
 
       def visit_BreakNode(o)
-        "break" + (o.value ? " #{o.value}" : '') + ';'
+        'break' + (o.value ? " #{o.value}" : '') + ';'
       end
 
       def visit_ContinueNode(o)
-        "continue" + (o.value ? " #{o.value}" : '') + ';'
+        'continue' + (o.value ? " #{o.value}" : '') + ';'
       end
 
-      def visit_TrueNode(o)
-        "true"
+      def visit_TrueNode(_o)
+        'true'
       end
 
-      def visit_FalseNode(o)
-        "false"
+      def visit_FalseNode(_o)
+        'false'
       end
 
-      def visit_EmptyStatementNode(o)
+      def visit_EmptyStatementNode(_o)
         ';'
       end
 
@@ -127,8 +127,8 @@ module RKelly
         "#{o.value.accept(self)}.#{o.accessor}"
       end
 
-      def visit_ThisNode(o)
-        "this"
+      def visit_ThisNode(_o)
+        'this'
       end
 
       def visit_BitwiseNotNode(o)
@@ -160,7 +160,7 @@ module RKelly
       end
 
       def visit_ReturnNode(o)
-        "return" + (o.value ? " #{o.value.accept(self)}" : '') + ';'
+        'return' + (o.value ? " #{o.value.accept(self)}" : '') + ';'
       end
 
       def visit_ThrowNode(o)
@@ -208,8 +208,8 @@ module RKelly
         [:RightShift, '>>'],
         [:StrictEqual, '==='],
         [:Subtract, '-'],
-        [:UnsignedRightShift, '>>>'],
-      ].each do |name,op|
+        [:UnsignedRightShift, '>>>']
+      ].each do |name, op|
         define_method(:"visit_#{name}Node") do |o|
           "#{o.left.accept(self)} #{op} #{o.value.accept(self)}"
         end
@@ -226,15 +226,15 @@ module RKelly
       def visit_CaseBlockNode(o)
         @indent += 1
         "{\n" + (o.value ? o.value.map { |x| x.accept(self) }.join('') : '') +
-          "#{@indent -=1; indent}}"
+          "#{@indent -= 1; indent}}"
       end
 
       def visit_CaseClauseNode(o)
-        if o.left
-          case_code = "#{indent}case #{o.left.accept(self)}:\n"
-        else
-          case_code = "#{indent}default:\n"
-        end
+        case_code = if o.left
+                      "#{indent}case #{o.left.accept(self)}:\n"
+                    else
+                      "#{indent}default:\n"
+                    end
         @indent += 1
         case_code += "#{o.value.accept(self)}\n"
         @indent -= 1
@@ -255,12 +255,12 @@ module RKelly
 
       def visit_ObjectLiteralNode(o)
         @indent += 1
-        lit = "{" + (o.value.length > 0 ? "\n" : ' ') +
-          o.value.map { |x| "#{indent}#{x.accept(self)}" }.join(",\n") +
-          begin
-            @indent -= 1
-            (o.value.length > 0 ? "\n#{indent}}" : '}')
-          end
+        lit = '{' + (o.value.length > 0 ? "\n" : ' ') +
+              o.value.map { |x| "#{indent}#{x.accept(self)}" }.join(",\n") +
+              begin
+                @indent -= 1
+                (o.value.length > 0 ? "\n#{indent}}" : '}')
+              end
       end
 
       def visit_PropertyNode(o)
@@ -276,14 +276,14 @@ module RKelly
       end
 
       def visit_FunctionExprNode(o)
-        name = (o.value == 'function') ? '' : ' '+o.value
-        "function" + name + function_params_and_body(o)
+        name = o.value == 'function' ? '' : ' ' + o.value
+        'function' + name + function_params_and_body(o)
       end
 
       # Helper for all the various function nodes
       def function_params_and_body(o)
         "(#{o.arguments.map { |x| x.accept(self) }.join(', ')}) " +
-          "#{o.function_body.accept(self)}"
+          o.function_body.accept(self).to_s
       end
 
       def visit_CommaNode(o)
@@ -297,13 +297,13 @@ module RKelly
 
       def visit_ConditionalNode(o)
         "#{o.conditions.accept(self)} ? #{o.value.accept(self)} : " +
-          "#{o.else.accept(self)}"
+          o.else.accept(self).to_s
       end
 
       def visit_ForInNode(o)
         var = o.left.is_a?(RKelly::Nodes::VarDeclNode) ? 'var ' : ''
         "for(#{var}#{o.left.accept(self)} in #{o.right.accept(self)}) " +
-          "#{o.value.accept(self)}"
+          o.value.accept(self).to_s
       end
 
       def visit_TryNode(o)
@@ -321,7 +321,10 @@ module RKelly
       end
 
       private
-      def indent; ' ' * @indent * 2; end
+
+      def indent
+        ' ' * @indent * 2
+      end
     end
   end
 end

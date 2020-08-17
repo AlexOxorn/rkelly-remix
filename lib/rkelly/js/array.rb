@@ -1,13 +1,13 @@
-module RKelly
+module RECMA
   module JS
     class Array < Base
       class << self
         def create(*args)
-          self.new(*args)
+          new(*args)
         end
       end
 
-      def initialize(*args)
+      def initialize(*_args)
         super()
       end
     end

@@ -1,4 +1,4 @@
-module RKelly
+module RECMA
   module Nodes
     class BracketAccessorNode < Node
       attr_reader :accessor

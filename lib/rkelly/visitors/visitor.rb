@@ -1,15 +1,15 @@
 module RKelly
   module Visitors
     class Visitor
-      TERMINAL_NODES = %w{
+      TERMINAL_NODES = %w[
         Break Continue EmptyStatement False Null Number Parameter Regexp Resolve
         String This True
-      }
-      SINGLE_VALUE_NODES = %w{
+      ].freeze
+      SINGLE_VALUE_NODES = %w[
         Parenthetical AssignExpr BitwiseNot Block Delete Element ExpressionStatement
         FunctionBody LogicalNot Return Throw TypeOf UnaryMinus UnaryPlus Void
-      }
-      BINARY_NODES = %w{
+      ].freeze
+      BINARY_NODES = %w[
         Add BitAnd BitOr BitXOr CaseClause Comma Divide DoWhile Equal Greater
         GreaterOrEqual In InstanceOf LeftShift Less LessOrEqual LogicalAnd
         LogicalOr Modulus Multiply NotEqual NotStrictEqual OpAndEqual
@@ -17,22 +17,22 @@ module RKelly
         OpMultiplyEqual OpOrEqual OpPlusEqual OpRShiftEqual OpURShiftEqual
         OpXOrEqual RightShift StrictEqual Subtract Switch UnsignedRightShift
         While With
-      }
-      ARRAY_VALUE_NODES = %w{
+      ].freeze
+      ARRAY_VALUE_NODES = %w[
         Arguments Array CaseBlock ConstStatement ObjectLiteral SourceElements
         VarStatement
-      }
-      NAME_VALUE_NODES = %w{
+      ].freeze
+      NAME_VALUE_NODES = %w[
         Label Property GetterProperty SetterProperty VarDecl
-      }
-      PREFIX_POSTFIX_NODES  = %w{ Postfix Prefix }
-      CONDITIONAL_NODES     = %w{ If Conditional }
-      FUNC_CALL_NODES       = %w{ NewExpr FunctionCall }
-      FUNC_DECL_NODES       = %w{ FunctionExpr FunctionDecl }
-      ALL_NODES = %w{ For ForIn Try BracketAccessor DotAccessor } +
-        TERMINAL_NODES + SINGLE_VALUE_NODES + BINARY_NODES + ARRAY_VALUE_NODES +
-        NAME_VALUE_NODES + PREFIX_POSTFIX_NODES + CONDITIONAL_NODES +
-        FUNC_CALL_NODES + FUNC_DECL_NODES
+      ].freeze
+      PREFIX_POSTFIX_NODES  = %w[Postfix Prefix].freeze
+      CONDITIONAL_NODES     = %w[If Conditional].freeze
+      FUNC_CALL_NODES       = %w[NewExpr FunctionCall].freeze
+      FUNC_DECL_NODES       = %w[FunctionExpr FunctionDecl].freeze
+      ALL_NODES = %w[For ForIn Try BracketAccessor DotAccessor] +
+                  TERMINAL_NODES + SINGLE_VALUE_NODES + BINARY_NODES + ARRAY_VALUE_NODES +
+                  NAME_VALUE_NODES + PREFIX_POSTFIX_NODES + CONDITIONAL_NODES +
+                  FUNC_CALL_NODES + FUNC_DECL_NODES
 
       def accept(target)
         target.accept(self)
@@ -44,13 +44,13 @@ module RKelly
 
       BINARY_NODES.each do |type|
         define_method(:"visit_#{type}Node") do |o|
-          [o.left && o.left.accept(self), o.value && o.value.accept(self)]
+          [o.left&.accept(self), o.value&.accept(self)]
         end
       end
 
       ARRAY_VALUE_NODES.each do |type|
         define_method(:"visit_#{type}Node") do |o|
-          o.value && o.value.map { |v| v ? v.accept(self) : nil }
+          o.value&.map { |v| v ? v.accept(self) : nil }
         end
       end
 
@@ -62,7 +62,7 @@ module RKelly
 
       SINGLE_VALUE_NODES.each do |type|
         define_method(:"visit_#{type}Node") do |o|
-          o.value.accept(self) if o.value
+          o.value&.accept(self)
         end
       end
 
@@ -74,10 +74,9 @@ module RKelly
 
       CONDITIONAL_NODES.each do |type|
         define_method(:"visit_#{type}Node") do |o|
-          [ o.conditions.accept(self),
-            o.value.accept(self),
-            o.else ? o.else.accept(self) : nil
-          ]
+          [o.conditions.accept(self),
+           o.value.accept(self),
+           o.else ? o.else.accept(self) : nil]
         end
       end
       FUNC_CALL_NODES.each do |type|
@@ -88,7 +87,7 @@ module RKelly
       FUNC_DECL_NODES.each do |type|
         define_method(:"visit_#{type}Node") do |o|
           [
-            o.value ? o.value : nil,
+            o.value || nil,
             o.arguments.map { |x| x.accept(self) },
             o.function_body.accept(self)
           ]
@@ -115,7 +114,7 @@ module RKelly
       def visit_TryNode(o)
         [
           o.value.accept(self),
-          o.catch_var ? o.catch_var : nil,
+          o.catch_var || nil,
           o.catch_block ? o.catch_block.accept(self) : nil,
           o.finally_block ? o.finally_block.accept(self) : nil
         ]

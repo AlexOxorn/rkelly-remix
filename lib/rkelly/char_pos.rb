@@ -1,5 +1,4 @@
-
-module RKelly
+module RECMA
   # Represents a character position in source code.
   #
   # It's a value object - it can't be modified.
@@ -27,9 +26,9 @@ module RKelly
       "{line:#{@line} char:#{@char} (#{@index})}"
     end
 
-    alias_method :inspect, :to_s
+    alias inspect to_s
 
     # A re-usable empty position
-    EMPTY = CharPos.new(1,0,-1)
+    EMPTY = CharPos.new(1, 0, -1)
   end
 end

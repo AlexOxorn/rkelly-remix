@@ -5,7 +5,7 @@ module RKelly
         @code = block
       end
 
-      def call(chain, *args)
+      def call(_chain, *args)
         @code.call(*args)
       end
     end

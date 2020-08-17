@@ -1,8 +1,8 @@
-require File.dirname(__FILE__) + "/helper"
+require File.dirname(__FILE__) + '/helper'
 
 class CommentsTest < NodeTestCase
   def test_some_comments
-    parser = RKelly::Parser.new
+    parser = RECMA::Parser.new
     ast = parser.parse(<<-eojs)
       /**
        * This is an awesome test comment.
@@ -21,7 +21,7 @@ class CommentsTest < NodeTestCase
   end
 
   def test_only_comments
-    parser = RKelly::Parser.new
+    parser = RECMA::Parser.new
     ast = parser.parse(<<-eojs)
       /**
        * The first comment
@@ -36,8 +36,8 @@ class CommentsTest < NodeTestCase
   end
 
   def test_empty_source_results_in_zero_comments
-    parser = RKelly::Parser.new
-    ast = parser.parse("")
+    parser = RECMA::Parser.new
+    ast = parser.parse('')
 
     assert ast
     assert_equal(0, ast.comments.length)

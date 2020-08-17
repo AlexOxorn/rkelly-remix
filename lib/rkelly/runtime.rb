@@ -1,9 +1,9 @@
-require 'rkelly/js'
-require 'rkelly/runtime/scope_chain'
+require 'recma/js'
+require 'recma/runtime/scope_chain'
 
-module RKelly
+module RECMA
   class Runtime
-    UNDEFINED = RKelly::JS::Property.new(:undefined, :undefined)
+    UNDEFINED = RECMA::JS::Property.new(:undefined, :undefined)
 
     def initialize
       @parser = Parser.new
@@ -22,11 +22,11 @@ module RKelly
 
     def call_function(function_name, *args)
       function = @scope[function_name].value
-      @scope.new_scope { |chain|
-        function.js_call(chain, *(args.map { |x|
-          RKelly::JS::Property.new(:param, x)
-        }))
-      }.value
+      @scope.new_scope do |chain|
+        function.js_call(chain, *(args.map do |x|
+          RECMA::JS::Property.new(:param, x)
+        end))
+      end.value
     end
 
     def define_function(function, &block)

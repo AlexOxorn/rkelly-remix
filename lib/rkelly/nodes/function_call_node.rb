@@ -10,7 +10,7 @@ module RKelly
       def ==(other)
         super && @arguments == other.arguments
       end
-      alias :=~ :==
+      alias =~ ==
     end
   end
 end

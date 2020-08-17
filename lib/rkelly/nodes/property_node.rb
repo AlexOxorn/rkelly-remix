@@ -1,4 +1,4 @@
-module RKelly
+module RECMA
   module Nodes
     class PropertyNode < Node
       attr_reader :name
@@ -8,6 +8,6 @@ module RKelly
       end
     end
 
-    %w[Getter Setter].each {|node| eval "class #{node}PropertyNode < PropertyNode; end"}
+    %w[Getter Setter].each { |node| eval "class #{node}PropertyNode < PropertyNode; end" }
   end
 end

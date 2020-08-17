@@ -3,9 +3,9 @@ module RKelly
     class Base
       attr_reader :properties, :return, :value
       def initialize
-        @properties = Hash.new { |h,k|
+        @properties = Hash.new do |h, k|
           h[k] = Property.new(k, :undefined, self)
-        }
+        end
         @return     = nil
         @returned   = false
         @value      = self
@@ -13,9 +13,10 @@ module RKelly
       end
 
       def [](name)
-        return self.properties[name] if has_property?(name)
-        if self.properties['prototype'].value != :undefined
-          self.properties['prototype'].value[name]
+        return properties[name] if has_property?(name)
+
+        if properties['prototype'].value != :undefined
+          properties['prototype'].value[name]
         else
           RKelly::Runtime::UNDEFINED
         end
@@ -23,35 +24,39 @@ module RKelly
 
       def []=(name, value)
         return unless can_put?(name)
+
         if has_property?(name)
-          self.properties[name].value = value
+          properties[name].value = value
         else
-          self.properties[name] = Property.new(name, value, self)
+          properties[name] = Property.new(name, value, self)
         end
       end
 
       def can_put?(name)
-        if !has_property?(name)
-          return true if self.properties['prototype'].nil?
-          return true if self.properties['prototype'].value.nil?
-          return true if self.properties['prototype'].value == :undefined
-          return self.properties['prototype'].value.can_put?(name)
+        unless has_property?(name)
+          return true if properties['prototype'].nil?
+          return true if properties['prototype'].value.nil?
+          return true if properties['prototype'].value == :undefined
+
+          return properties['prototype'].value.can_put?(name)
         end
-        !self.properties[name].read_only?
+        !properties[name].read_only?
       end
 
       def has_property?(name)
-        return true if self.properties.has_key?(name)
-        return false if self.properties['prototype'].nil?
-        return false if self.properties['prototype'].value.nil?
-        return false if self.properties['prototype'].value == :undefined
-        self.properties['prototype'].value.has_property?(name)
+        return true if properties.has_key?(name)
+        return false if properties['prototype'].nil?
+        return false if properties['prototype'].value.nil?
+        return false if properties['prototype'].value == :undefined
+
+        properties['prototype'].value.has_property?(name)
       end
 
       def delete(name)
         return true unless has_property?(name)
-        return false if self.properties[name].dont_delete?
-        self.properties.delete(name)
+        return false if properties[name].dont_delete?
+
+        properties.delete(name)
         true
       end
 
@@ -59,13 +64,10 @@ module RKelly
         case hint
         when 'Number'
           value_of = self['valueOf']
-          if value_of.function || value_of.value.is_a?(RKelly::JS::Function)
-            return value_of
-          end
+          return value_of if value_of.function || value_of.value.is_a?(RKelly::JS::Function)
+
           to_string = self['toString']
-          if to_string.function || to_string.value.is_a?(RKelly::JS::Function)
-            return to_string
-          end
+          return to_string if to_string.function || to_string.value.is_a?(RKelly::JS::Function)
         end
       end
 
@@ -74,9 +76,12 @@ module RKelly
         @return = value
       end
 
-      def returned?; @returned; end
+      def returned?
+        @returned
+      end
 
       private
+
       def unbound_method(name, object_id = nil, &block)
         name = "#{name}_#{self.class.to_s.split('::').last}_#{object_id}"
         unless RKelly::JS::Base.instance_methods.include?(name.to_sym)

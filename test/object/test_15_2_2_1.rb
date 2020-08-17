@@ -1,8 +1,8 @@
-require File.dirname(__FILE__) + "/../helper"
+require File.dirname(__FILE__) + '/../helper'
 
 class Object_15_2_2_1_Test < ECMAScriptTestCase
   def test_null_typeof
-    js_assert_equal("'object'", "typeof new Object(null)")
+    js_assert_equal("'object'", 'typeof new Object(null)')
   end
 
   def test_null_to_string
@@ -10,7 +10,7 @@ class Object_15_2_2_1_Test < ECMAScriptTestCase
   end
 
   def test_void_0_typeof
-    js_assert_equal("'object'", "typeof new Object(void 0)")
+    js_assert_equal("'object'", 'typeof new Object(void 0)')
   end
 
   def test_void_0_to_string
@@ -18,16 +18,16 @@ class Object_15_2_2_1_Test < ECMAScriptTestCase
   end
 
   @@tests = {
-    'minus_1'       => ['-1', 'Number'],
-    '1'             => ['1', 'Number'],
-    'minus_0'       => ['-0', 'Number'],
-    '0'             => ['0', 'Number'],
-    'nan'           => ['Number.NaN', 'Number'],
-    'empty_string'  => ['""', 'String'],
-    'string'        => ['"string"', 'String'],
-    'true'          => ['true', 'Boolean'],
-    'false'         => ['false', 'Boolean'],
-    'boolean'       => ['Boolean()', 'Boolean'],
+    'minus_1' => ['-1', 'Number'],
+    '1' => %w[1 Number],
+    'minus_0' => ['-0', 'Number'],
+    '0' => %w[0 Number],
+    'nan' => ['Number.NaN', 'Number'],
+    'empty_string' => ['""', 'String'],
+    'string' => ['"string"', 'String'],
+    'true' => %w[true Boolean],
+    'false' => %w[false Boolean],
+    'boolean' => ['Boolean()', 'Boolean']
   }
 
   @@tests.each do |name, info|

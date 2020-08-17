@@ -1,6 +1,6 @@
-require 'rkelly/char_pos'
+require 'recma/char_pos'
 
-module RKelly
+module RECMA
   # Represents a syntax element location in source code - where it
   # begins and where it ends.
   #
@@ -23,7 +23,7 @@ module RKelly
       "<#{@from}...#{@to}>"
     end
 
-    alias_method :inspect, :to_s
+    alias inspect to_s
 
     # A re-usable empty range
     EMPTY = CharRange.new(CharPos::EMPTY, CharPos::EMPTY)

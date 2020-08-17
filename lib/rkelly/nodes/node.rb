@@ -21,7 +21,7 @@ module RKelly
       def ==(other)
         other.is_a?(self.class) && @value == other.value
       end
-      alias :=~ :==
+      alias =~ ==
 
       def ===(other)
         other.is_a?(self.class) && @value === other.value
@@ -39,8 +39,11 @@ module RKelly
         when String
           ast = RKelly::Parser.new.parse(pattern)
           # Only take the first statement
-          finder = ast.value.first.class.to_s =~ /StatementNode$/ ?
-            ast.value.first.value : ast.value.first
+          finder = if ast.value.first.class.to_s =~ /StatementNode$/
+                     ast.value.first.value
+                   else
+                     ast.value.first
+end
           visitor = PointcutVisitor.new(finder)
         else
           visitor = PointcutVisitor.new(pattern)
@@ -49,7 +52,7 @@ module RKelly
         visitor.accept(self)
         visitor
       end
-      alias :/ :pointcut
+      alias / pointcut
 
       # Generates an s-expression data structure like so:
       #
@@ -72,22 +75,22 @@ module RKelly
       def to_dots
         visitor = DotVisitor.new
         visitor.accept(self)
-        header = <<-END
-digraph g {
-graph [ rankdir = "TB" ];
-node [
-  fontsize = "16"
-  shape = "ellipse"
-];
-edge [ ];
+        header = <<~END
+          digraph g {
+          graph [ rankdir = "TB" ];
+          node [
+            fontsize = "16"
+            shape = "ellipse"
+          ];
+          edge [ ];
         END
         nodes = visitor.nodes.map { |x| x.to_s }.join("\n")
         counter = 0
-        arrows = visitor.arrows.map { |x|
+        arrows = visitor.arrows.map do |x|
           s = "#{x} [\nid = #{counter}\n];"
           counter += 1
           s
-        }.join("\n")
+        end.join("\n")
         "#{header}\n#{nodes}\n#{arrows}\n}"
       end
 

@@ -1,4 +1,4 @@
-module RKelly
+module RECMA
   module Visitors
     class SexpVisitor < Visitor
       def visit_NumberNode(o)
@@ -14,7 +14,7 @@ module RKelly
       end
 
       def visit_VarDeclNode(o)
-        [ o.constant? ? :const_decl : :var_decl ] + super(o)
+        [o.constant? ? :const_decl : :var_decl] + super(o)
       end
 
       def visit_VarStatementNode(o)
@@ -178,7 +178,7 @@ module RKelly
       end
 
       def visit_ForNode(o)
-        [ :for, *super]
+        [:for, *super]
       end
 
       def visit_BlockNode(o)
@@ -194,14 +194,14 @@ module RKelly
       end
 
       def visit_ForInNode(o)
-        [ :for_in, *super]
+        [:for_in, *super]
       end
 
       def visit_TryNode(o)
-        [ :try, *super]
+        [:try, *super]
       end
 
-      def visit_EmptyStatementNode(o)
+      def visit_EmptyStatementNode(_o)
         [:empty]
       end
 
@@ -234,7 +234,7 @@ module RKelly
       end
 
       def visit_LabelNode(o)
-        [:label ] + super
+        [:label] + super
       end
 
       def visit_ThrowNode(o)
@@ -246,39 +246,39 @@ module RKelly
       end
 
       def visit_PropertyNode(o)
-        [ :property ] + super
+        [:property] + super
       end
 
       def visit_GetterPropertyNode(o)
-        [ :getter ] + super
+        [:getter] + super
       end
 
       def visit_SetterPropertyNode(o)
-        [ :setter ] + super
+        [:setter] + super
       end
 
       def visit_ElementNode(o)
-        [:element, super ]
+        [:element, super]
       end
 
       def visit_ExpressionStatementNode(o)
-        [:expression, super ]
+        [:expression, super]
       end
 
       def visit_OpEqualNode(o)
-        [:op_equal, *super ]
+        [:op_equal, *super]
       end
 
       def visit_OpPlusEqualNode(o)
-        [:op_plus_equal, *super ]
+        [:op_plus_equal, *super]
       end
 
       def visit_OpMinusEqualNode(o)
-        [:op_minus_equal, *super ]
+        [:op_minus_equal, *super]
       end
 
       def visit_OpMultiplyEqualNode(o)
-        [:op_multiply_equal, *super ]
+        [:op_multiply_equal, *super]
       end
 
       def visit_OpDivideEqualNode(o)
@@ -286,27 +286,27 @@ module RKelly
       end
 
       def visit_OpLShiftEqualNode(o)
-        [:op_lshift_equal, *super ]
+        [:op_lshift_equal, *super]
       end
 
       def visit_OpRShiftEqualNode(o)
-        [:op_rshift_equal, *super ]
+        [:op_rshift_equal, *super]
       end
 
       def visit_OpURShiftEqualNode(o)
-        [:op_urshift_equal, *super ]
+        [:op_urshift_equal, *super]
       end
 
       def visit_OpAndEqualNode(o)
-        [:op_and_equal, *super ]
+        [:op_and_equal, *super]
       end
 
       def visit_OpXOrEqualNode(o)
-        [:op_xor_equal, *super ]
+        [:op_xor_equal, *super]
       end
 
       def visit_OpOrEqualNode(o)
-        [:op_or_equal, *super ]
+        [:op_or_equal, *super]
       end
 
       def visit_OpModEqualNode(o)
@@ -325,7 +325,7 @@ module RKelly
         [:array, super]
       end
 
-      def visit_ThisNode(o)
+      def visit_ThisNode(_o)
         [:this]
       end
 
@@ -334,11 +334,11 @@ module RKelly
       end
 
       def visit_FunctionExprNode(o)
-        [ :func_expr, *super]
+        [:func_expr, *super]
       end
 
       def visit_FunctionDeclNode(o)
-        [ :func_decl, *super]
+        [:func_decl, *super]
       end
 
       def visit_ArgumentsNode(o)
@@ -347,27 +347,25 @@ module RKelly
 
       def visit_DotAccessorNode(o)
         [:dot_access,
-          super,
-          o.accessor
-        ]
+         super,
+         o.accessor]
       end
 
-      def visit_NullNode(o)
+      def visit_NullNode(_o)
         [:nil]
       end
-      
+
       def visit_StringNode(o)
         [:str, o.value]
       end
 
-      def visit_FalseNode(o)
+      def visit_FalseNode(_o)
         [:false]
       end
 
-      def visit_TrueNode(o)
+      def visit_TrueNode(_o)
         [:true]
       end
-
     end
   end
 end

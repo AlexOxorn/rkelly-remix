@@ -1,6 +1,6 @@
-require 'rkelly/nodes/binary_node'
+require 'recma/nodes/binary_node'
 
-module RKelly
+module RECMA
   module Nodes
     class CaseClauseNode < BinaryNode
       def initialize(left, src = SourceElementsNode.new([]))

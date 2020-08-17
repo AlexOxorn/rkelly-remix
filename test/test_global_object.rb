@@ -1,7 +1,7 @@
-require File.dirname(__FILE__) + "/helper"
+require File.dirname(__FILE__) + '/helper'
 
 class GlobalObjectTest < Test::Unit::TestCase
-  include RKelly::JS
+  include RECMA::JS
 
   def setup
     @object = GlobalObject.new
@@ -20,7 +20,7 @@ class GlobalObjectTest < Test::Unit::TestCase
   end
 
   def test_undefined_brace
-    #assert_equal :undefined, @object['foo'].value
+    # assert_equal :undefined, @object['foo'].value
   end
 
   def test_delete

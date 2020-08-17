@@ -1,4 +1,4 @@
-module RKelly
-  class SyntaxError < ::SyntaxError
+module RECMA
+  class SyntaxError < RuntimeError
   end
 end

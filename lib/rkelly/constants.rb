@@ -1,3 +1,3 @@
-module RKelly
-  VERSION = '0.0.7'
+module RECMA
+  VERSION = '0.0.7'.freeze
 end

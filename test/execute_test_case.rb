@@ -1,9 +1,7 @@
 class ExecuteTestCase < Test::Unit::TestCase
-  include RKelly::Nodes
+  include RECMA::Nodes
 
-  if method_defined? :default_test
-    undef :default_test
-  end
+  undef :default_test if method_defined? :default_test
 
   def assert_execute(expected, code)
     scope_chain = @runtime.execute(code)
@@ -13,4 +11,3 @@ class ExecuteTestCase < Test::Unit::TestCase
     end
   end
 end
-

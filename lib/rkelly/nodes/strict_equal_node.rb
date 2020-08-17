@@ -1,4 +1,4 @@
-module RKelly
+module RECMA
   module Nodes
     class StrictEqualNode < BinaryNode
     end

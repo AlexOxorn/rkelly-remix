@@ -1,4 +1,4 @@
-module RKelly
+module RECMA
   module Visitors
     class ECMAVisitor < Visitor
       def initialize
@@ -301,7 +301,7 @@ module RKelly
       end
 
       def visit_ForInNode(o)
-        var = o.left.is_a?(RKelly::Nodes::VarDeclNode) ? 'var ' : ''
+        var = o.left.is_a?(RECMA::Nodes::VarDeclNode) ? 'var ' : ''
         "for(#{var}#{o.left.accept(self)} in #{o.right.accept(self)}) " +
           o.value.accept(self).to_s
       end

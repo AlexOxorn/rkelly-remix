@@ -1,4 +1,4 @@
-= RKelly-Remix CHANGELOG
+= RECMA-Remix CHANGELOG
 
 === 0.0.7
 
@@ -19,7 +19,7 @@
 
 === 0.0.3
 
-* Add RKelly::Parser#stopped_at method for error reporting.
+* Add RECMA::Parser#stopped_at method for error reporting.
 
 === 0.0.2
 
@@ -27,7 +27,7 @@
 
 === 0.0.1
 
-* A fork of RKelly
+* A fork of RECMA
 * 10x speedup of Tokenizer.
 * Full begin/end line/char info on each node.
 * List all comment nodes in root node instead of attempting to associate them with syntax nodes and failing at it.

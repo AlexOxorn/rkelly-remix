@@ -1,4 +1,4 @@
-module RKelly
+module RECMA
   module Visitors
     class Visitor
       TERMINAL_NODES = %w[

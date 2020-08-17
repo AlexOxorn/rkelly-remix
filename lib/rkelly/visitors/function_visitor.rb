@@ -1,4 +1,4 @@
-module RKelly
+module RECMA
   module Visitors
     class FunctionVisitor < Visitor
       attr_reader :scope_chain
@@ -12,7 +12,7 @@ module RKelly
       end
 
       def visit_FunctionDeclNode(o)
-        scope_chain[o.value].value = RKelly::JS::Function.new(o.function_body, o.arguments) if o.value
+        scope_chain[o.value].value = RECMA::JS::Function.new(o.function_body, o.arguments) if o.value
       end
 
       %w[

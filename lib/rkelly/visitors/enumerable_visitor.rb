@@ -1,4 +1,4 @@
-module RKelly
+module RECMA
   module Visitors
     class EnumerableVisitor < Visitor
       def initialize(block)

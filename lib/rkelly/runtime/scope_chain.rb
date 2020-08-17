@@ -1,7 +1,7 @@
-module RKelly
+module RECMA
   class Runtime
     class ScopeChain
-      include RKelly::JS
+      include RECMA::JS
 
       def initialize(_scope = Scope.new)
         @chain = [GlobalObject.new]

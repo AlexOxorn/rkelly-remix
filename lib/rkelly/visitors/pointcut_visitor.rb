@@ -1,4 +1,4 @@
-module RKelly
+module RECMA
   module Visitors
     class PointcutVisitor < Visitor
       attr_reader :matches
